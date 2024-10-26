@@ -1,1 +1,1 @@
-# Rick-and-Morty-Game
+# Rick-and-Morty-Game-Beta
