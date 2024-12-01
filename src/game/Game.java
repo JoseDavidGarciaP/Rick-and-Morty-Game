@@ -1,42 +1,35 @@
 package game;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import game.AccesoADatos.DatabaseHandler;
+
 public class Game {
     private static Scanner scanner = new Scanner(System.in);
-    private static Rick[] ricks;
-    private static Morty[] mortys;
+    private static List<Rick> ricks;
+    private static List<Morty> mortys;
     private static Rick selectedRick;
     private static Morty selectedMorty;
     private static int roundCounter = 0; // Contador de rondas
 
     public static void main(String[] args) {
-        // Inicializar ricks
-        ricks = new Rick[]{
-            new Rick("Rick Sánchez C-137", 100, 50),
-            new Rick("Rick Prime", 100, 55),
-            new Rick("Doofus Rick", 80, 30),
-            new Rick("Simple Rick", 70, 35),
-            new Rick("Tiny Rick", 90, 45),
-            new Rick("Pickle Rick", 95, 60),
-            new Rick("Rick D. Sanchez", 85, 40)
-        };
-
-        // Inicializar mortys
-        mortys = new Morty[]{
-            new Morty("Morty Smith C-137", 80, 40),
-            new Morty("Evil Morty", 85, 45),
-            new Morty("President Morty", 90, 50),
-            new Morty("Hammer Morty", 75, 35),
-            new Morty("Big Head Morty", 70, 30),
-            new Morty("Morty Jr.", 60, 25),
-            new Morty("Ghost in a Jar Morty", 65, 20)
-        };
+        try {
+            // Cargar los personajes desde la base de datos
+            DatabaseHandler.Characters characters = DatabaseHandler.loadCharacters(); //metodo que cargar los personajes
+            ricks = characters.getRicks(); //se extraen las listas para ser usadas
+            mortys = characters.getMortys();
+        } catch (IOException e) {
+            System.out.println("Error al cargar los personajes: " + e.getMessage()); //manejo de errores
+            return;
+        }
 
         // Seleccionar personajes
-        selectedRick = selectRick();
-        selectedMorty = selectMorty();
+        selectedRick = selectCharacter(ricks, "Rick");
+        selectedMorty = selectCharacter(mortys, "Morty");
+
 
         // Mostrar personajes seleccionados
         System.out.println("\nRick seleccionado:");
@@ -83,25 +76,28 @@ public class Game {
         scanner.close();
     }
 
-    // Método para seleccionar Rick
-    public static Rick selectRick() {
-        System.out.println("\nSelecciona tu Rick:");
-        for (int i = 0; i < ricks.length; i++) {
-            System.out.printf("%d. %s (Salud: %d, Poder: %d)%n", i + 1, ricks[i].name, ricks[i].health, ricks[i].power);
+    // Método de tipos generico para seleccionar ambos personajes 
+    public static <T extends Character> T selectCharacter(List<T> characters, String characterType) {
+        while (true) { // Continuar hasta que se haga una selección válida
+            try {
+                System.out.printf("\nSelecciona tu %s:%n", characterType);
+                for (int i = 0; i < characters.size(); i++) {
+                    System.out.printf("%d. %s (Salud: %d, Poder: %d)%n", 
+                                    i + 1, 
+                                    characters.get(i).name, 
+                                    characters.get(i).health, 
+                                    characters.get(i).power);
+                }
+                int selection = getIntInput(String.format("Elige un %s: ", characterType)) - 1;
+                return characters.get(selection); // Devuelve el personaje seleccionado
+            } catch (IndexOutOfBoundsException e) {
+                System.out.printf("Selección inválida. Por favor, selecciona un número dentro del rango de %ss.%n", characterType);
+            } catch (Exception e) {
+                System.out.println("Ha ocurrido un error inesperado: " + e.getMessage());
+            }
         }
-        int selection = getIntInput("Elige un Rick: ") - 1;
-        return ricks[selection];
     }
-
-    // Método para seleccionar Morty
-    public static Morty selectMorty() {
-        System.out.println("\nSelecciona tu Morty:");
-        for (int i = 0; i < mortys.length; i++) {
-            System.out.printf("%d. %s (Salud: %d, Poder: %d)%n", i + 1, mortys[i].name, mortys[i].health, mortys[i].power);
-        }
-        int selection = getIntInput("Elige un Morty: ") - 1;
-        return mortys[selection];
-    }
+    
 
     // Mostrar opciones de acción
     public static void showOptions() {
@@ -114,28 +110,32 @@ public class Game {
 
     // Ejecutar acción seleccionada
     public static void executeAction(Character player, Character opponent, int option) {
-        switch (option) {
-            case 1:
-                player.attack(opponent);
-                break;
-            case 2:
-                player.defend();
-                break;
-            case 3:
-                player.heal();
-                break;
-            case 4:
-                // Comprobar si se puede usar la habilidad especial
-                if (roundCounter % 3 == 0) {
-                    player.useSpecialAbility(opponent);
-                } else {
-                    System.out.printf("%s no puede usar su habilidad especial todavía. Debe esperar hasta la próxima ronda.%n", player.name);
-                }
-                break;
-            default:
-                System.out.println("Opción no válida, intenta nuevamente.");
+        try {
+            switch (option) {
+                case 1:
+                    player.attack(opponent);
+                    break;
+                case 2:
+                    player.defend();
+                    break;
+                case 3:
+                    player.heal();
+                    break;
+                case 4:
+                    if (roundCounter % 3 == 0) {
+                        player.useSpecialAbility(opponent);
+                    } else {
+                        System.out.printf("%s no puede usar su habilidad especial todavía. Debe esperar hasta la próxima ronda.%n", player.name);
+                    }
+                    break;
+                default:
+                    System.out.println("Opción no válida, intenta nuevamente.");
+            }
+        } catch (Exception e) {
+            System.out.println("Se produjo un error al ejecutar la acción: " + e.getMessage());
         }
     }
+    
 
     // Determinar quién comienza
     public static boolean decideInitialTurn() {

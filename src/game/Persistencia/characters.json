@@ -1,0 +1,20 @@
+{
+    "ricks": [
+    { "name": "Rick Sánchez C-137", "health": 100, "power": 50 },
+    { "name": "Rick Prime", "health": 100, "power": 55 },
+    { "name": "Doofus Rick", "health": 80, "power": 30 },
+    { "name": "Simple Rick", "health": 70, "power": 35 },
+    { "name": "Tiny Rick", "health": 90, "power": 45 },
+    { "name": "Pickle Rick", "health": 95, "power": 60 },
+    { "name": "Rick D. Sanchez", "health": 85, "power": 40 }
+    ],
+    "mortys": [
+    { "name": "Morty Smith C-137", "health": 80, "power": 40 },
+    { "name": "Evil Morty", "health": 85, "power": 45 },
+    { "name": "President Morty", "health": 90, "power": 50 },
+    { "name": "Hammer Morty", "health": 75, "power": 35 },
+    { "name": "Big Head Morty", "health": 70, "power": 30 },
+    { "name": "Morty Jr.", "health": 60, "power": 25 },
+    { "name": "Ghost in a Jar Morty", "health": 65, "power": 20 }
+    ]
+}
