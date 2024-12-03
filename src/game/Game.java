@@ -26,7 +26,7 @@ public class Game {
             return;
         }
 
-        // Seleccionar personajes
+        // Seleccionar personajes 
         selectedRick = selectCharacter(ricks, "Rick");
         selectedMorty = selectCharacter(mortys, "Morty");
 
@@ -46,12 +46,12 @@ public class Game {
 
         while (!exit) {
             if (rickTurn) {
-                System.out.println("\nEs el turno de Rick: " + selectedRick.name);
+                System.out.println("\nEs el turno de Rick: " + selectedRick.getName());
                 showOptions();
                 int option = getIntInput("Elige una opción: ");
                 executeAction(selectedRick, selectedMorty, option);
             } else {
-                System.out.println("\nEs el turno de Morty: " + selectedMorty.name);
+                System.out.println("\nEs el turno de Morty: " + selectedMorty.getName());
                 showOptions();
                 int option = getIntInput("Elige una opción: ");
                 executeAction(selectedMorty, selectedRick, option);
@@ -84,9 +84,9 @@ public class Game {
                 for (int i = 0; i < characters.size(); i++) {
                     System.out.printf("%d. %s (Salud: %d, Poder: %d)%n", 
                                     i + 1, 
-                                    characters.get(i).name, 
+                                    characters.get(i).getName(), 
                                     characters.get(i).health, 
-                                    characters.get(i).power);
+                                    characters.get(i).getPower());
                 }
                 int selection = getIntInput(String.format("Elige un %s: ", characterType)) - 1;
                 return characters.get(selection); // Devuelve el personaje seleccionado
@@ -125,7 +125,7 @@ public class Game {
                     if (roundCounter % 3 == 0) {
                         player.useSpecialAbility(opponent);
                     } else {
-                        System.out.printf("%s no puede usar su habilidad especial todavía. Debe esperar hasta la próxima ronda.%n", player.name);
+                        System.out.printf("%s no puede usar su habilidad especial todavía. Debe esperar hasta la próxima ronda.%n", player.getName());
                     }
                     break;
                 default:

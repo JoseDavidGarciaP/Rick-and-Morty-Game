@@ -8,8 +8,8 @@ public class Morty extends Character {
     // Implementación de la habilidad especial de Morty
     @Override
     public void useSpecialAbility(Character opponent) {
-        int healAmount = (int) (this.maxHealth * 0.4); // Se cura el 40% de su salud máxima
-        this.health = Math.min(this.health + healAmount, this.maxHealth);
-        System.out.printf("%s usa su habilidad especial y se cura %d puntos de salud. Salud actual: %d%n", name, healAmount, this.health);
+        int healAmount = (int) (this.getMaxHealth() * 0.4); // Se cura el 40% de su salud máxima
+        this.health = Math.min(this.health + healAmount, this.getMaxHealth());
+        System.out.printf("%s usa su habilidad especial y se cura %d puntos de salud. Salud actual: %d%n", getName(), healAmount, this.health);
     }
 }
