@@ -2,7 +2,7 @@ package game;
 
 public class Character {
     private String name;
-    private int health;
+    protected int health;
     private int maxHealth;
     private int power;
     private boolean defense = false;
@@ -14,8 +14,9 @@ public class Character {
         this.power = power; // Almacena el poder
     }
 
+    //encapsulamiento
     public String getName() {
-        return name;
+        return name; 
     }
 
     public void setName(String name) {
