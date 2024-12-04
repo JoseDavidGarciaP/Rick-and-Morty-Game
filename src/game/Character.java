@@ -1,11 +1,11 @@
 package game;
 
 public class Character {
-    String name;
-    int health;
-    int maxHealth;
-    int power;
-    boolean defense = false;
+    private String name;
+    protected int health;
+    private int maxHealth;
+    private int power;
+    private boolean defense = false;
 
     public Character(String name, int health, int power) {
         this.name = name; // Almacena el nombre
@@ -13,6 +13,49 @@ public class Character {
         this.maxHealth = health; // Almacena la salud máxima
         this.power = power; // Almacena el poder
     }
+
+    //encapsulamiento
+    public String getName() {
+        return name; 
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public boolean isDefense() {
+        return defense;
+    }
+
+    public void setDefense(boolean defense) {
+        this.defense = defense;
+    }
+
+
 
     // Método para mostrar las estadísticas del personaje
     public void characterStats() {
