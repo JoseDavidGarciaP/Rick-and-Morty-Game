@@ -1,6 +1,8 @@
 package game;
 
-public class Character {
+import javax.swing.*;
+
+public abstract class Character { // Cambiar a clase abstracta
     private String name;
     protected int health;
     private int maxHealth;
@@ -8,15 +10,15 @@ public class Character {
     private boolean defense = false;
 
     public Character(String name, int health, int power) {
-        this.name = name; // Almacena el nombre
-        this.health = health; // Almacena la salud
-        this.maxHealth = health; // Almacena la salud máxima
-        this.power = power; // Almacena el poder
+        this.name = name;
+        this.health = health;
+        this.maxHealth = health;
+        this.power = power;
     }
 
-    //encapsulamiento
+    // Métodos getter y setter
     public String getName() {
-        return name; 
+        return name;
     }
 
     public void setName(String name) {
@@ -55,46 +57,40 @@ public class Character {
         this.defense = defense;
     }
 
-
-
     // Método para mostrar las estadísticas del personaje
-    public void characterStats() {
-        System.out.printf("Nombre: %s, Salud: %d, Poder: %d%n", name, health, power);
+    public void characterStats(JTextArea battleLog) {
+        battleLog.append("Nombre: " + name + ", Salud: " + health + ", Poder: " + power + "\n");
     }
 
     // Método para atacar
-    public void attack(Character opponent) {
+    public void attack(Character opponent, JTextArea battleLog) {
         int damage = this.power;
         if (opponent.defense) {
             damage /= 2; // Si el oponente está defendiendo, reduce el daño a la mitad
-            System.out.printf("%s se defiende y solo recibe %d puntos de daño%n", opponent.name, damage);
+            battleLog.append(opponent.name + " se defiende y solo recibe " + damage + " puntos de daño\n");
             opponent.defense = false; // Termina el estado de defensa
         } else {
-            System.out.printf("%s ataca a %s y le quita %d puntos de salud%n", name, opponent.name, damage);
+            battleLog.append(this.name + " ataca a " + opponent.name + " y le quita " + damage + " puntos de salud\n");
         }
         opponent.health -= damage;
     }
 
     // Método para curarse
-    public void heal() {
-        if (health < maxHealth) { // Solo se cura si ha perdido salud
-            int lostHealth = maxHealth - health;
-            int healing = (int) (lostHealth * 0.3); // Cura el 30% de la salud perdida
-            health = Math.min(health + healing, maxHealth); // Asegura no superar la salud máxima
-            System.out.printf("%s se ha curado %d puntos de salud. Salud actual: %d%n", name, healing, health);
-        } else {
-            System.out.printf("%s tiene la salud completa y no puede curarse.%n", name);
-        }
+    public void heal(JTextArea battleLog) {
+        int lostHealth = this.maxHealth - this.health; // Calcula la salud perdida
+        int healing = (int) (lostHealth * 0.3); // Cura el 30% de la salud perdida
+        this.health += healing; // Incrementa la salud actual
+        this.health = Math.min(this.health, this.maxHealth); // Asegura que no supere la salud máxima
+        battleLog.append(name + " se ha curado " + healing + " puntos de salud. Salud actual: " + health + "\n");
+    
     }
 
     // Método para defenderse
-    public void defend() {
+    public void defend(JTextArea battleLog) {
         defense = true;
-        System.out.printf("%s se prepara para defenderse del próximo ataque.%n", name);
+        battleLog.append(name + " se prepara para defenderse del próximo ataque.\n");
     }
 
-    // Método para usar habilidad especial (abstracto)
-    public void useSpecialAbility(Character opponent) {
-        // Este método se implementará en las subclases
-    }
+    // Método abstracto para habilidad especial (se implementará en subclases)
+    public abstract void useSpecialAbility(Character opponent, JTextArea battleLog);
 }

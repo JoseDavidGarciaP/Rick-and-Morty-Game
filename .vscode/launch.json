@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GameGUI",
+            "request": "launch",
+            "mainClass": "game.GameGUI",
+            "projectName": "Rick-and-Morty-Game-Beta_1f6edc14"
+        },
+        {
+            "type": "java",
+            "name": "Game",
+            "request": "launch",
+            "mainClass": "game.Game",
+            "projectName": "Rick-and-Morty-Game-Beta_1f6edc14"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
